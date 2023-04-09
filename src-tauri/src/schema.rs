@@ -2,7 +2,8 @@
 
 diesel::table! {
     messages (id) {
-        id -> Integer,
+        id -> Text,
+        session_id -> Text,
         content -> Text,
         role -> Text,
         finish_reason -> Text,

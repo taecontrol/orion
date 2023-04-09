@@ -24,7 +24,7 @@ pub fn new_session() -> Session {
 
     let new_session = NewSession {
         id: Uuid::new_v4().to_string(),
-        name: String::from("New Session"),
+        name: String::from("New chat"),
         created_at: chrono::Utc::now().naive_utc(),
     };
 

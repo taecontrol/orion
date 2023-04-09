@@ -12,6 +12,7 @@ mod open_ai;
 
 use commands::ask_command::ask;
 use commands::session_commands::*;
+use commands::message_commands::*;
 
 #[tokio::main]
 async fn main() {
@@ -26,7 +27,7 @@ async fn main() {
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![ask, new_session, list_sessions])
+        .invoke_handler(tauri::generate_handler![ask, new_session, list_sessions, list_messages])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

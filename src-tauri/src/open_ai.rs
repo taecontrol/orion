@@ -16,9 +16,9 @@ pub struct OpenAIRequest {
 
 #[derive(serde::Deserialize, Debug)]
 pub struct OpenAIUsage {
-    pub prompt_tokens: i16,
-    pub completion_tokens: i16,
-    pub total_tokens: i16,
+    pub prompt_tokens: i32,
+    pub completion_tokens: i32,
+    pub total_tokens: i32,
 }
 
 #[derive(serde::Deserialize, Debug)]

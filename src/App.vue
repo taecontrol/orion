@@ -14,21 +14,31 @@
       </div>
 
       <div class="overflow-y-auto divide-y">
-        <div v-for="session of sessions" class="p-2">
+        <div
+          v-for="session of sessions"
+          :key="session.id"
+          @click="selectSession(session.id)"
+          class="p-2 hover:cursor-pointer"
+          :class="{ 'bg-indigo-100': selectedSession === session.id }"
+        >
           <p>{{session.name}}</p>
           <span>{{session.created_at}}</span>
         </div>
       </div>
     </div>
 
-    <div class="h-full flex flex-1 flex-col">
-      <h1 class="text-center">Orion</h1>
-
-      <div class="h-full">
-        <p>hoka</p>
+    <div class="w-full h-full flex flex-col overflow-hidden">
+      <div class="overflow-y-auto divide-y">
+        <div
+          v-for="message of messages"
+          :key="message.id"
+          class="p-4"
+        >
+          <div v-html="convertMarkdownToHtml(message.content)" class="prose"></div>
+        </div>
       </div>
 
-      <div class="p-4">
+      <div class="flex-1 p-4">
         <div class="flex items-start space-x-4">
           <div class="min-w-0 flex-1">
             <form @submit.prevent="onSubmit" class="relative">
@@ -72,16 +82,26 @@
 
 <script setup lang="ts">
 
-import {onMounted, ref} from 'vue';
+import {onMounted, ref, watch} from 'vue';
 import {invoke} from '@tauri-apps/api/tauri';
 import {PlusCircleIcon} from '@heroicons/vue/20/solid';
-import {Session} from './components/types';
+import {Message, Session} from './components/types';
+import {marked} from 'marked';
 
 const message = ref('');
 const sessions = ref<Session[]>([]);
+const selectedSession = ref<string|null>(null);
+const messages = ref<Message[]>([]);
 
 onMounted(async () => {
   sessions.value = await listSessions();
+  selectedSession.value = getSelectedSession();
+});
+
+watch(selectedSession, async (sessionId) => {
+  if (sessionId) {
+    messages.value = await listMessages();
+  }
 });
 
 async function listSessions(): Promise<Session[]> {
@@ -89,12 +109,30 @@ async function listSessions(): Promise<Session[]> {
 }
 
 async function newSession() {
-  const newSession = await invoke('new_session')
-  console.log(newSession);
+  await invoke('new_session')
 }
 
-function onSubmit() {
-  invoke('ask', { message:  message.value })
-  console.log('submit', message.value);
+function selectSession(sessionId: string) {
+  selectedSession.value = sessionId;
+  localStorage.setItem('selectedSession', selectedSession.value);
+}
+
+function getSelectedSession() {
+  return localStorage.getItem('selectedSession');
+}
+
+function listMessages(): Promise<Message[]> {
+  return invoke('list_messages', { session_id: selectedSession.value })
+}
+
+async function onSubmit() {
+  const newMessages: Message[] = await invoke('ask', { parentSessionId: selectedSession.value, message:  message.value })
+
+  messages.value = [...messages.value, ...newMessages];
+  console.log(messages.value);
+}
+
+function convertMarkdownToHtml(markdown: string) {
+  return marked(markdown);
 }
 </script>
