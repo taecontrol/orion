@@ -1,21 +1,22 @@
 <template>
   <div class="flex h-full">
 
-    <div class="w-[300px] bg-gray-100">
-      <div class="flex flex-col">
-        <div class="w-full p-4">
-          <button
-            type="button"
-            class="w-full inline-flex justify-between items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            @click="newSession"
-          >
-            New chat
-            <PlusCircleIcon class="-mr-0.5 h-5 w-5" aria-hidden="true" />
-          </button>
-        </div>
+    <div class="flex flex-col w-[300px] h-full bg-gray-100 overflow-hidden">
+      <div class="w-full p-4">
+        <button
+          type="button"
+          class="w-full inline-flex justify-between items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          @click="newSession"
+        >
+          New chat
+          <PlusCircleIcon class="-mr-0.5 h-5 w-5" aria-hidden="true" />
+        </button>
+      </div>
 
-        <div class="h-full">
-
+      <div class="overflow-y-auto divide-y">
+        <div v-for="session of sessions" class="p-2">
+          <p>{{session.name}}</p>
+          <span>{{session.created_at}}</span>
         </div>
       </div>
     </div>
@@ -71,11 +72,21 @@
 
 <script setup lang="ts">
 
-import {ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import {invoke} from '@tauri-apps/api/tauri';
 import {PlusCircleIcon} from '@heroicons/vue/20/solid';
+import {Session} from './components/types';
 
 const message = ref('');
+const sessions = ref<Session[]>([]);
+
+onMounted(async () => {
+  sessions.value = await listSessions();
+});
+
+async function listSessions(): Promise<Session[]> {
+  return invoke('list_sessions')
+}
 
 async function newSession() {
   const newSession = await invoke('new_session')
