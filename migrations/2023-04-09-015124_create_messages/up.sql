@@ -1,6 +1,6 @@
 -- Your SQL goes here
 CREATE TABLE messages (
-    id SERIAL PRIMARY KEY,
+    id INT PRIMARY KEY NOT NULL,
     content TEXT NOT NULL,
     role VARCHAR(255) NOT NULL,
     finish_reason VARCHAR(255) NOT NULL,

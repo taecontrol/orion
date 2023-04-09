@@ -1,5 +1,4 @@
 use crate::open_ai::{OpenAI, OpenAIMessage, OpenAIRequest};
-use crate::settings;
 
 #[tauri::command]
 pub async fn ask(message: String) {

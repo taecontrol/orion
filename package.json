@@ -10,6 +10,7 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@heroicons/vue": "^2.0.17",
     "@tailwindcss/forms": "^0.5.3",
     "@tauri-apps/api": "^1.2.0",
     "vue": "^3.2.45"

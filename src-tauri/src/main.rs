@@ -5,10 +5,13 @@
 
 mod commands;
 mod db;
+mod models;
+mod schema;
 mod settings;
 mod open_ai;
 
 use commands::ask_command::ask;
+use commands::session_commands::new_session;
 
 #[tokio::main]
 async fn main() {
@@ -23,7 +26,7 @@ async fn main() {
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![ask])
+        .invoke_handler(tauri::generate_handler![ask, new_session])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
