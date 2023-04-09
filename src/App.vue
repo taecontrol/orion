@@ -28,7 +28,7 @@
     </div>
 
     <div class="w-full h-full flex flex-col overflow-hidden">
-      <div class="overflow-y-auto divide-y">
+      <div id="chat" class="overflow-y-auto divide-y">
         <div
           v-for="message of messages"
           :key="message.id"
@@ -53,9 +53,7 @@
                   v-model="message"
                 />
 
-                <!-- Spacer element to match the height of the toolbar -->
                 <div class="py-2" aria-hidden="true">
-                  <!-- Matches height of button in toolbar (1px border + 36px content height) -->
                   <div class="py-px">
                     <div class="h-9" />
                   </div>
@@ -87,6 +85,7 @@ import {invoke} from '@tauri-apps/api/tauri';
 import {PlusCircleIcon} from '@heroicons/vue/20/solid';
 import {Message, Session} from './components/types';
 import {marked} from 'marked';
+import { v4 as uuidv4 } from 'uuid';
 
 const message = ref('');
 const sessions = ref<Session[]>([]);
@@ -126,10 +125,25 @@ function listMessages(): Promise<Message[]> {
 }
 
 async function onSubmit() {
-  const newMessages: Message[] = await invoke('ask', { parentSessionId: selectedSession.value, message:  message.value })
+  const dummyMessage: Message = {
+    id: uuidv4(),
+    role: 'user',
+    content: message.value,
+    created_at: new Date().toISOString(),
+    session_id: selectedSession.value!,
+  };
 
-  messages.value = [...messages.value, ...newMessages];
-  console.log(messages.value);
+  message.value = '';
+  messages.value = [...messages.value, dummyMessage];
+
+  await invoke('ask', { parentSessionId: selectedSession.value, message: dummyMessage.content })
+
+  messages.value = await listMessages();
+
+  setTimeout(() => {
+      const chat = document.getElementById('.overflow-y-auto');
+      chat?.scrollTo(0, chat.scrollHeight);
+    }, 100);
 }
 
 function convertMarkdownToHtml(markdown: string) {
