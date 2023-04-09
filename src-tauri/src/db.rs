@@ -1,48 +1,30 @@
 use std::fs;
 use std::path::Path;
-use serde::Deserialize;
-use surrealdb::{dbs, Surreal};
-use surrealdb::kvs::Datastore;
-use surrealdb::opt::auth::Root;
-use surrealdb::sql::Thing;
 
-#[derive(Debug, Deserialize)]
-struct Person {
-    name: String,
-}
+use diesel::prelude::*;
+use diesel::sqlite::SqliteConnection;
+use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 
-#[derive(Debug, Deserialize)]
-struct Record {
-    #[allow(dead_code)]
-    id: Thing,
-}
+const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 
-pub async fn init() -> Result<(), E> {
+pub fn init() {
     if !db_file_exists() {
         create_db_file();
     }
 
-    let ds = Datastore::new("file://" + &get_db_path()).await?;
-    let db = Surreal::new::<dbs::Kvs>(ds).await?;
+    run_migrations();
+}
 
-    db.signin(Root {
-        username: "root",
-        password: "root",
-    })
-    .await?;
+fn run_migrations() {
+    let mut connection = establish_connection();
+    connection.run_pending_migrations(MIGRATIONS).unwrap();
+}
 
-    db.use_ns("orion").use_db("orion").await?;
+fn establish_connection() -> SqliteConnection {
+    let db_path = "sqlite://".to_string() + get_db_path().as_str();
 
-    let created: Record = db
-        .create("person")
-        .content(Person {
-            name: "John Doe".to_string(),
-        })
-        .await?;
-
-    dbg!(created);
-
-    Ok(())
+    SqliteConnection::establish(&db_path)
+        .unwrap_or_else(|_| panic!("Error connecting to {}", db_path))
 }
 
 fn create_db_file() {
@@ -63,5 +45,5 @@ fn db_file_exists() -> bool {
 
 fn get_db_path() -> String {
     let home_dir = dirs::home_dir().unwrap();
-    return home_dir.to_str().unwrap().to_string() + "/.config/orion/database.db";
+    home_dir.to_str().unwrap().to_string() + "/.config/orion/database.sqlite"
 }
