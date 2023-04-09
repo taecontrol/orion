@@ -3,13 +3,12 @@
     windows_subsystem = "windows"
 )]
 
+mod commands;
 mod db;
+mod settings;
+mod open_ai;
 
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
+use commands::ask_command::ask;
 
 #[tokio::main]
 async fn main() {
@@ -19,11 +18,12 @@ async fn main() {
         .setup(|_app| {
             tokio::spawn(async move {
                 db::init();
+                settings::Settings::init();
             });
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![ask])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -1,52 +1,61 @@
-<script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import Greet from "./components/Greet.vue";
-</script>
-
 <template>
-  <div class="container">
-    <h1>Welcome to Tauri!</h1>
+  <div class="h-full flex flex-col">
+    <h1 class="text-center">Orion</h1>
 
-    <div class="row">
-      <a href="https://vitejs.dev" target="_blank">
-        <img src="/vite.svg" class="logo vite" alt="Vite logo" />
-      </a>
-      <a href="https://tauri.app" target="_blank">
-        <img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-      </a>
-      <a href="https://vuejs.org/" target="_blank">
-        <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-      </a>
+    <div class="h-full">
+      <p>hoka</p>
     </div>
 
-    <p>Click on the Tauri, Vite, and Vue logos to learn more.</p>
+    <div class="p-4">
+      <div class="flex items-start space-x-4">
+        <div class="min-w-0 flex-1">
+          <form @submit.prevent="onSubmit" class="relative">
+            <div class="overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
+              <label for="message" class="sr-only">Ask something</label>
+              <textarea
+                rows="3"
+                name="message"
+                id="message"
+                class="block w-full resize-none border-0 bg-transparent text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:py-1.5 sm:text-sm sm:leading-6"
+                placeholder="Ask something..."
+                v-model="message"
+              />
 
-    <p>
-      Recommended IDE setup:
-      <a href="https://code.visualstudio.com/" target="_blank">VS Code</a>
-      +
-      <a href="https://github.com/johnsoncodehk/volar" target="_blank">Volar</a>
-      +
-      <a href="https://github.com/tauri-apps/tauri-vscode" target="_blank"
-        >Tauri</a
-      >
-      +
-      <a href="https://github.com/rust-lang/rust-analyzer" target="_blank"
-        >rust-analyzer</a
-      >
-    </p>
+              <!-- Spacer element to match the height of the toolbar -->
+              <div class="py-2" aria-hidden="true">
+                <!-- Matches height of button in toolbar (1px border + 36px content height) -->
+                <div class="py-px">
+                  <div class="h-9" />
+                </div>
+              </div>
+            </div>
 
-    <Greet />
+            <div class="absolute inset-x-0 bottom-0 flex justify-end py-2 pl-3 pr-2">
+              <div class="flex-shrink-0">
+                <button
+                  type="submit"
+                  class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-<style scoped>
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
-}
+<script setup lang="ts">
 
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #249b73);
+import {ref} from 'vue';
+import {invoke} from '@tauri-apps/api/tauri';
+
+const message = ref('');
+
+function onSubmit() {
+  invoke('ask', { message:  message.value })
+  console.log('submit', message.value);
 }
-</style>
+</script>
