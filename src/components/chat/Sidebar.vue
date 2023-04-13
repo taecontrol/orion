@@ -55,7 +55,7 @@ async function listSessions(): Promise<Session[]> {
 
 async function newSession() {
   await invoke('new_session');
-  await listSessions();
+  sessions.value = await listSessions();
 }
 
 function selectSession(sessionId: string) {
