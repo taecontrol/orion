@@ -1,12 +1,25 @@
 use diesel::prelude::*;
+use diesel::query_builder::IntoUpdateTarget;
 use uuid::Uuid;
 use crate::db::establish_db_connection;
 use crate::open_ai::{OpenAI, OpenAIMessage, OpenAIRequest};
 use crate::models::{Message};
+use crate::schema::sessions::dsl::sessions;
+use crate::schema::sessions::name;
 
 #[tauri::command]
 pub async fn ask(parent_session_id: String, message: String) -> Vec<Message> {
     let mut previous_messages = get_messages(&parent_session_id);
+
+    if previous_messages.len() == 0 {
+        let connection = &mut establish_db_connection();
+
+        diesel::update(sessions)
+            .filter(crate::schema::sessions::dsl::id.eq(parent_session_id.clone()))
+            .set(name.eq(message.clone()))
+            .execute(connection)
+            .expect("Error updating session name");
+    }
 
     previous_messages.push(OpenAIMessage {
         role: String::from("user"),
