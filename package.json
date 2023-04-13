@@ -13,6 +13,7 @@
     "@heroicons/vue": "^2.0.17",
     "@tailwindcss/forms": "^0.5.3",
     "@tauri-apps/api": "^1.2.0",
+    "dayjs": "^1.11.7",
     "marked": "^4.3.0",
     "uuid": "^9.0.0",
     "vue": "^3.2.45"

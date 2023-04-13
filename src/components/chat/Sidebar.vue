@@ -19,16 +19,20 @@
       :class="{ 'bg-indigo-100': selectedSessionId === session.id }"
     >
       <p>{{session.name}}</p>
-      <span>{{session.created_at}}</span>
+      <span class="text-gray-400">{{dayjs(session.created_at).fromNow()}}</span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import * as dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import {PlusCircleIcon} from "@heroicons/vue/20/solid/index.js";
 import {onMounted, ref} from "vue";
 import {Session} from "../../types";
 import {invoke} from "@tauri-apps/api/tauri";
+
+dayjs.extend(relativeTime)
 
 const sessions = ref<Session[]>([]);
 
