@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import {PlusCircleIcon} from "@heroicons/vue/20/solid/index.js";
 import {onMounted, ref} from "vue";
