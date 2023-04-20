@@ -1,6 +1,18 @@
 <template>
-  <div class="flex-1 p-4">
-    <div class="flex items-start space-x-4">
+  <div class="relative flex-1 px-4 pb-4 shadow">
+    <Transition
+      enter-from-class="translate-y-[100px]"
+      enter-active-class="transition ease-out duration-100"
+      leave-active-class="transition ease-in duration-75 translate-y-[100px]"
+    >
+      <div v-show="loading" class="absolute z-0 inset-x-0 flex justify-center -top-20">
+        <div class="bg-indigo-50 p-4 flex items-center rounded-xl shadow shadow-indigo-500">
+          <SpinnerIcon class="h-5 w-5 text-indigo-500" />
+          <span class="text-indigo-500 font-medium">Loading...</span>
+        </div>
+      </div>
+    </Transition>
+    <div class="relative z-10 flex items-start space-x-4 bg-white">
       <div class="min-w-0 flex-1">
         <form @submit.prevent="onSubmit" class="relative">
           <div class="overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
@@ -39,10 +51,17 @@
 
 <script setup lang="ts">
 import {ref} from "vue";
+import SpinnerIcon from '../icons/SpinnerIcon.vue';
 
 const message = ref('');
 
 const emit = defineEmits(['submit']);
+defineProps({
+  loading: {
+    type: Boolean,
+    required: false,
+  }
+});
 
 function onSubmit() {
   emit('submit', message.value);
