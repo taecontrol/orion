@@ -49,8 +49,15 @@ defineProps({
 onMounted(async () => {
   sessions.value = await listSessions();
 
-  await listen('update_sessions', async () => {
+  await listen('sessions_updated', async () => {
     sessions.value = await listSessions();
+  });
+
+  await listen('session_deleted', async () => {
+    sessions.value = await listSessions();
+    if (sessions.value.length > 0) {
+      selectSession(sessions.value[0].id);
+    }
   });
 });
 

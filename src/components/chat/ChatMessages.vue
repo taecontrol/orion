@@ -1,4 +1,9 @@
 <template>
+  <div class="absolute inset-x-0 flex justify-end p-4">
+    <button class="rounded-full p-2 shadow group hover:bg-red-500 transition easy-in-out duration-150" @click="confirmDeleteSession">
+      <TrashIcon class="w-6 h-6 group-hover:text-white" />
+    </button>
+  </div>
   <ul ref="chatContainer" class="overflow-y-auto divide-y h-full px-4">
     <li
       v-for="message of messages"
@@ -10,6 +15,13 @@
   </ul>
 
   <MessageTextarea @submit="onSubmit" :loading="loading" />
+
+  <DeleteSessionDialog
+    :open="openConfirmation"
+    @on-close="openConfirmation = false"
+    @on-cancel="openConfirmation = false"
+    @on-delete="deleteSession"
+  />
 </template>
 
 <script setup lang="ts">
@@ -19,7 +31,10 @@ import {marked} from "marked";
 import {invoke} from "@tauri-apps/api/tauri";
 import MessageTextarea from "./MessageTextarea.vue";
 import {v4 as uuidv4} from "uuid";
+import TrashIcon from '../icons/TrashIcon.vue';
+import DeleteSessionDialog from './DeleteSessionDialog.vue';
 
+const openConfirmation = ref(false);
 const loading = ref(false);
 const messages = ref<Message[]>([]);
 const chatContainer = ref<HTMLElement|null>(null);
@@ -48,7 +63,6 @@ function convertMarkdownToHtml(markdown: string) {
 function scrollToBottom() {
     setTimeout(() => {
       if (chatContainer.value) {
-        console.log(chatContainer.value);
         chatContainer.value.scrollTo({
           top: chatContainer.value.scrollHeight,
           left: 0,
@@ -56,6 +70,15 @@ function scrollToBottom() {
         });
       }
     }, 10)
+}
+
+function confirmDeleteSession() {
+  openConfirmation.value = true;
+}
+
+async function deleteSession() {
+  openConfirmation.value = false;
+  await invoke('delete_session', { parentSessionId: props.selectedSessionId });
 }
 
 async function onSubmit(message: string) {

@@ -27,7 +27,7 @@ async fn main() {
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![ask, new_session, list_sessions, list_messages])
+        .invoke_handler(tauri::generate_handler![ask, new_session, list_sessions, list_messages, delete_session])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

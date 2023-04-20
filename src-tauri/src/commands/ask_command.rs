@@ -21,7 +21,7 @@ pub async fn ask(app_handle: tauri::AppHandle, parent_session_id: String, messag
             .execute(connection)
             .expect("Error updating session name");
 
-        app_handle.emit_all("update_sessions", {}).unwrap();
+        app_handle.emit_all("session_updated", {}).unwrap();
     }
 
     previous_messages.push(OpenAIMessage {
