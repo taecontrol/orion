@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute inset-x-0 flex justify-end p-4">
+  <div class="absolute right-0 p-4">
     <button class="rounded-full p-2 shadow group hover:bg-red-500 transition easy-in-out duration-150" @click="confirmDeleteSession">
       <TrashIcon class="w-6 h-6 group-hover:text-white" />
     </button>

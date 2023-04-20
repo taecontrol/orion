@@ -49,15 +49,13 @@ defineProps({
 onMounted(async () => {
   sessions.value = await listSessions();
 
-  await listen('sessions_updated', async () => {
+  await listen('session_updated', async () => {
     sessions.value = await listSessions();
   });
 
   await listen('session_deleted', async () => {
     sessions.value = await listSessions();
-    if (sessions.value.length > 0) {
-      selectSession(sessions.value[0].id);
-    }
+    selectFirstSession();
   });
 });
 
@@ -68,9 +66,16 @@ async function listSessions(): Promise<Session[]> {
 async function newSession() {
   await invoke('new_session');
   sessions.value = await listSessions();
+  selectFirstSession();
 }
 
 function selectSession(sessionId: string) {
   emit('select-session', sessionId);
+}
+
+function selectFirstSession() {
+  if (sessions.value.length > 0) {
+    selectSession(sessions.value[0].id);
+  }
 }
 </script>
