@@ -18,7 +18,7 @@
       class="p-2 hover:cursor-pointer"
       :class="{ 'bg-indigo-100': selectedSessionId === session.id }"
     >
-      <p>{{session.name}}</p>
+      <p class="truncate">{{session.name}}</p>
       <span class="text-gray-400">{{dayjs(session.created_at).fromNow()}}</span>
     </div>
   </div>

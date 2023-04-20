@@ -1,13 +1,13 @@
 <template>
-  <div id="chat" class="overflow-y-auto divide-y">
-    <div
+  <ul ref="chatContainer" class="overflow-y-auto divide-y h-full">
+    <li
       v-for="message of messages"
       :key="message.id"
       class="p-4"
     >
       <div v-html="convertMarkdownToHtml(message.content)" class="prose"></div>
-    </div>
-  </div>
+    </li>
+  </ul>
 
   <MessageTextarea @submit="onSubmit" />
 </template>
@@ -21,6 +21,7 @@ import MessageTextarea from "./MessageTextarea.vue";
 import {v4 as uuidv4} from "uuid";
 
 const messages = ref<Message[]>([]);
+const chatContainer = ref<HTMLElement|null>(null);
 
 const props = defineProps({
   selectedSessionId: {
@@ -32,6 +33,7 @@ const props = defineProps({
 watch(() => props.selectedSessionId, async (sessionId) => {
   if (sessionId) {
     messages.value = await listMessages();
+    scrollToBottom();
   }
 });
 
@@ -40,6 +42,19 @@ function listMessages(): Promise<Message[]> {
 }
 function convertMarkdownToHtml(markdown: string) {
   return marked(markdown);
+}
+
+function scrollToBottom() {
+    setTimeout(() => {
+      if (chatContainer.value) {
+        console.log(chatContainer.value);
+        chatContainer.value.scrollTo({
+          top: chatContainer.value.scrollHeight,
+          left: 0,
+          behavior: "smooth",
+        });
+      }
+    }, 10)
 }
 
 async function onSubmit(message: string) {
@@ -57,9 +72,6 @@ async function onSubmit(message: string) {
 
   messages.value = await listMessages();
 
-  setTimeout(() => {
-    const chat = document.getElementById('.overflow-y-auto');
-    chat?.scrollTo(0, chat.scrollHeight);
-  }, 100);
+  scrollToBottom();
 }
 </script>
