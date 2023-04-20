@@ -1,5 +1,6 @@
 use diesel::prelude::*;
 use diesel::query_builder::IntoUpdateTarget;
+use tauri::Manager;
 use uuid::Uuid;
 use crate::db::establish_db_connection;
 use crate::open_ai::{OpenAI, OpenAIMessage, OpenAIRequest};
@@ -8,7 +9,7 @@ use crate::schema::sessions::dsl::sessions;
 use crate::schema::sessions::name;
 
 #[tauri::command]
-pub async fn ask(parent_session_id: String, message: String) -> Vec<Message> {
+pub async fn ask(app_handle: tauri::AppHandle, parent_session_id: String, message: String) -> Vec<Message> {
     let mut previous_messages = get_messages(&parent_session_id);
 
     if previous_messages.len() == 0 {
@@ -19,6 +20,8 @@ pub async fn ask(parent_session_id: String, message: String) -> Vec<Message> {
             .set(name.eq(message.clone()))
             .execute(connection)
             .expect("Error updating session name");
+
+        app_handle.emit_all("update_sessions", {}).unwrap();
     }
 
     previous_messages.push(OpenAIMessage {

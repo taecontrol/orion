@@ -31,6 +31,7 @@ import {PlusCircleIcon} from "@heroicons/vue/20/solid/index.js";
 import {onMounted, ref} from "vue";
 import {Session} from "../../types";
 import {invoke} from "@tauri-apps/api/tauri";
+import {listen} from '@tauri-apps/api/event';
 
 dayjs.extend(relativeTime)
 
@@ -47,6 +48,10 @@ defineProps({
 
 onMounted(async () => {
   sessions.value = await listSessions();
+
+  await listen('update_sessions', async () => {
+    sessions.value = await listSessions();
+  });
 });
 
 async function listSessions(): Promise<Session[]> {
