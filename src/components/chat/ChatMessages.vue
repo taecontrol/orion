@@ -56,7 +56,7 @@ watch(
 );
 
 function listMessages(): Promise<Message[]> {
-  return invoke('list_messages', { parentSessionId: props.selectedSessionId });
+  return invoke('list_messages', { sessionId: props.selectedSessionId });
 }
 function convertMarkdownToHtml(markdown: string) {
   return marked(markdown);

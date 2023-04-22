@@ -51,14 +51,20 @@ fn rename_session_if_new(
     message: String,
     app_handle: tauri::AppHandle,
 ) {
-    if previous_messages.len() == 0 {
+    if previous_messages.len() <= 1 {
         sessions_service::update_session_name(session_id, message);
         app_handle.emit_all("session_updated", {}).unwrap();
     }
 }
 
 fn get_context(session_id: String, message: String) -> Vec<OpenAIMessage> {
-    let mut previous_messages = messages_service::list_messages(&session_id);
+    let mut previous_messages: Vec<OpenAIMessage> = messages_service::list_messages(&session_id)
+        .into_iter()
+        .map(|message| OpenAIMessage {
+            role: message.role,
+            content: message.content,
+        })
+        .collect();
 
     previous_messages.push(OpenAIMessage {
         role: String::from("user"),
