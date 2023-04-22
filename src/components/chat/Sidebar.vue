@@ -18,24 +18,24 @@
       class="p-2 hover:cursor-pointer"
       :class="{ 'bg-indigo-100': selectedSessionId === session.id }"
     >
-      <p class="truncate">{{session.name}}</p>
-      <span class="text-gray-400">{{dayjs.utc(session.created_at).local().fromNow()}}</span>
+      <p class="truncate">{{ session.name }}</p>
+      <span class="text-gray-400">{{ dayjs.utc(session.created_at).local().fromNow() }}</span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import utc from "dayjs/plugin/utc";
-import {PlusCircleIcon} from "@heroicons/vue/20/solid/index.js";
-import {onMounted, ref} from "vue";
-import {Session} from "../../types";
-import {invoke} from "@tauri-apps/api/tauri";
-import {listen} from '@tauri-apps/api/event';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import utc from 'dayjs/plugin/utc';
+import { PlusCircleIcon } from '@heroicons/vue/20/solid/index.js';
+import { onMounted, ref } from 'vue';
+import { Session } from '../../types';
+import { invoke } from '@tauri-apps/api/tauri';
+import { listen } from '@tauri-apps/api/event';
 
-dayjs.extend(relativeTime)
-dayjs.extend(utc)
+dayjs.extend(relativeTime);
+dayjs.extend(utc);
 
 const sessions = ref<Session[]>([]);
 

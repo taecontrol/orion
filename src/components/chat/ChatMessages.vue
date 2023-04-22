@@ -30,8 +30,8 @@ import { marked } from 'marked';
 import { invoke } from '@tauri-apps/api/tauri';
 import MessageTextarea from './MessageTextarea.vue';
 import { v4 as uuidv4 } from 'uuid';
-import TrashIcon from '../icons/TrashIcon.vue';
 import DeleteSessionDialog from './DeleteSessionDialog.vue';
+import { TrashIcon } from '@heroicons/vue/24/outline';
 
 const openConfirmation = ref(false);
 const loading = ref(false);
