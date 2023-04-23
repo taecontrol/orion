@@ -40,7 +40,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
 import { PlusCircleIcon } from '@heroicons/vue/20/solid/index.js';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { Session } from '../../types';
 import { invoke } from '@tauri-apps/api/tauri';
 import { listen } from '@tauri-apps/api/event';
@@ -53,16 +53,18 @@ const sessions = ref<Session[]>([]);
 
 const emit = defineEmits(['select-session']);
 
-defineProps({
+const props = defineProps({
   selectedSessionId: {
+    type: String,
+    required: false,
+  },
+  selectedAssistantId: {
     type: String,
     required: false,
   },
 });
 
 onMounted(async () => {
-  sessions.value = await listSessions();
-
   await listen('session_updated', async () => {
     sessions.value = await listSessions();
   });
@@ -73,12 +75,27 @@ onMounted(async () => {
   });
 });
 
+watch(
+  () => props.selectedAssistantId,
+  async (value) => {
+    if (!value) {
+      return;
+    }
+    sessions.value = await listSessions();
+    selectFirstSession();
+  }
+);
+
 async function listSessions(): Promise<Session[]> {
-  return invoke('list_sessions');
+  return invoke('list_sessions', { assistantId: props.selectedAssistantId });
 }
 
 async function newSession() {
-  await invoke('new_session');
+  if (!props.selectedAssistantId) {
+    return;
+  }
+
+  await invoke('new_session', { assistantId: props.selectedAssistantId });
   sessions.value = await listSessions();
   selectFirstSession();
 }

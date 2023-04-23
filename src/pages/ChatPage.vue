@@ -3,7 +3,11 @@
     <TitleBar />
 
     <div class="relative z-0 flex max-h-[calc(100%)] grow">
-      <Sidebar :selected-session-id="selectedSession" @select-session="selectSession" />
+      <Sidebar
+        :selected-assistant-id="selectedAssistant"
+        :selected-session-id="selectedSession"
+        @select-session="selectSession"
+      />
 
       <div class="flex flex-col w-full h-full overflow-hidden pt-[30px]">
         <ChatMessages :selected-session-id="selectedSession" />
@@ -19,9 +23,11 @@ import ChatMessages from '../components/chat/ChatMessages.vue';
 import TitleBar from '../components/TitleBar.vue';
 
 const selectedSession = ref<string | undefined>(undefined);
+const selectedAssistant = ref<string | undefined>(undefined);
 
 onMounted(async () => {
   selectedSession.value = getSelectedSession();
+  selectedAssistant.value = getSelectedAssistant();
 });
 
 function selectSession(sessionId: string) {
@@ -31,5 +37,9 @@ function selectSession(sessionId: string) {
 
 function getSelectedSession() {
   return localStorage.getItem('selectedSession') ?? undefined;
+}
+
+function getSelectedAssistant() {
+  return localStorage.getItem('selectedAssistant') ?? undefined;
 }
 </script>

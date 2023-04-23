@@ -103,7 +103,7 @@ function confirmDeleteSession() {
 
 async function deleteSession() {
   openConfirmation.value = false;
-  await invoke('delete_session', { parentSessionId: props.selectedSessionId });
+  await invoke('delete_session', { sessionId: props.selectedSessionId });
 }
 
 async function onSubmit(message: string) {

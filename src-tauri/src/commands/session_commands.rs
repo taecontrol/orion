@@ -5,15 +5,16 @@ use tauri::Manager;
 use uuid::Uuid;
 
 #[tauri::command]
-pub fn list_sessions() -> Vec<Session> {
-    sessions_service::list_sessions()
+pub fn list_sessions(assistant_id: String) -> Vec<Session> {
+    sessions_service::list_sessions(&assistant_id)
 }
 
 #[tauri::command]
-pub fn new_session() -> Session {
+pub fn new_session(assistant_id: String) -> Session {
     let new_session = NewSession {
         id: Uuid::new_v4().to_string(),
         name: String::from("New chat"),
+        assistant_id,
         created_at: chrono::Utc::now().naive_utc(),
     };
 
@@ -23,9 +24,9 @@ pub fn new_session() -> Session {
 }
 
 #[tauri::command]
-pub fn delete_session(app_handle: tauri::AppHandle, parent_session_id: String) {
-    messages_service::delete_session_messages(parent_session_id.clone());
-    sessions_service::delete_session(parent_session_id.clone());
+pub fn delete_session(app_handle: tauri::AppHandle, session_id: String) {
+    messages_service::delete_session_messages(session_id.clone());
+    sessions_service::delete_session(session_id.clone());
 
     app_handle.emit_all("session_deleted", {}).unwrap();
 }

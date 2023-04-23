@@ -25,6 +25,7 @@ diesel::table! {
 diesel::table! {
     sessions (id) {
         id -> Text,
+        assistant_id -> Text,
         name -> Nullable<Text>,
         created_at -> Timestamp,
     }

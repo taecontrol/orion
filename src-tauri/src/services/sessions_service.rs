@@ -6,10 +6,11 @@ use crate::{
 };
 use diesel::prelude::*;
 
-pub fn list_sessions() -> Vec<Session> {
+pub fn list_sessions(assistant_id: &String) -> Vec<Session> {
     let connection = &mut establish_db_connection();
 
     dsl::sessions
+        .filter(dsl::assistant_id.eq(assistant_id))
         .order_by(dsl::created_at.desc())
         .load::<Session>(connection)
         .expect("Error loading sessions")
