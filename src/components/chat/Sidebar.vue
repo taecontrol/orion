@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex flex-col w-[300px] h-full bg-gray-100 overflow-hidden">
+  <div class="relative flex flex-col w-[300px] h-full bg-gray-100 overflow-hidden pt-[30px]">
     <div class="w-full p-4">
       <button
         type="button"

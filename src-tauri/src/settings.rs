@@ -36,12 +36,7 @@ fn create_file() {
 
     let mut file = fs::File::create(path).unwrap();
 
-    file.write_all(
-        b"{
-        open_ai_secret: \"\"
-    }",
-    )
-    .unwrap();
+    file.write_all(b"{\"open_ai_secret\": \"\"}").unwrap();
 }
 
 fn file_exists() -> bool {
