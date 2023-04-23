@@ -24,7 +24,10 @@
       </div>
     </div>
 
-    <div class="absolute inset-x-0 bottom-0 flex items-center justify-end">
+    <div class="absolute inset-x-0 bottom-0 flex items-center justify-between">
+      <router-link to="/assistants" class="p-2 rounded-full">
+        <UserCircleIcon class="w-6 h-6" />
+      </router-link>
       <router-link to="/settings" class="p-2 rounded-full">
         <Cog8ToothIcon class="w-6 h-6" />
       </router-link>
@@ -41,7 +44,7 @@ import { onMounted, ref } from 'vue';
 import { Session } from '../../types';
 import { invoke } from '@tauri-apps/api/tauri';
 import { listen } from '@tauri-apps/api/event';
-import { Cog8ToothIcon } from '@heroicons/vue/24/outline';
+import { Cog8ToothIcon, UserCircleIcon } from '@heroicons/vue/24/outline';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);

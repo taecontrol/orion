@@ -39,6 +39,7 @@ async fn main() {
             get_settings,
             set_settings,
             create_assistant,
+            list_assistants,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

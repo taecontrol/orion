@@ -15,6 +15,13 @@ export type Message = {
   created_at?: string;
 };
 
+export type Assistant = {
+  id: string;
+  name: string;
+  description: string;
+  created_at: string;
+};
+
 export type Settings = {
   open_ai_secret: string;
 };

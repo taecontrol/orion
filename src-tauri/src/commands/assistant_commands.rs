@@ -19,3 +19,8 @@ pub fn create_assistant(new_assistant: NewAssistantRequest) {
 
     assistants_service::store_new_assistant(&assistant);
 }
+
+#[tauri::command]
+pub fn list_assistants() -> Vec<Assistant> {
+    assistants_service::list_assistants()
+}
