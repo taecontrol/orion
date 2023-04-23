@@ -89,5 +89,6 @@ function getSelectedAssistant() {
 
 function selectAssistant() {
   localStorage.setItem('selectedAssistant', selectedAssistant.value!);
+  localStorage.removeItem('selectedSession');
 }
 </script>

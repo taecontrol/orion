@@ -71,10 +71,13 @@ const props = defineProps({
 watch(
   () => props.selectedSessionId,
   async (sessionId) => {
-    if (sessionId) {
-      messages.value = await listMessages();
-      scrollToBottom();
+    if (!sessionId) {
+      messages.value = [];
+      return;
     }
+
+    messages.value = await listMessages();
+    scrollToBottom();
   }
 );
 
