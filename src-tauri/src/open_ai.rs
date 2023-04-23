@@ -1,7 +1,7 @@
-use reqwest::{Client, RequestBuilder};
 use crate::settings;
+use reqwest::{Client, RequestBuilder};
 
-#[derive(serde::Serialize, serde::Deserialize, Debug)]
+#[derive(serde::Serialize, serde::Deserialize, Debug, Clone)]
 pub struct OpenAIMessage {
     pub role: String,
     pub content: String,
@@ -45,7 +45,6 @@ pub struct OpenAI {
 
 impl OpenAI {
     pub fn new() -> Self {
-
         Self {
             client: Client::new(),
             api_token: settings::Settings::get().open_ai_secret,
@@ -57,11 +56,11 @@ impl OpenAI {
             request: self
                 .client
                 .post("https://api.openai.com/v1/chat/completions")
-                .header("Authorization", self.bearer_token())
+                .header("Authorization", self.bearer_token()),
         }
     }
 
-    fn bearer_token (&self) -> String {
+    fn bearer_token(&self) -> String {
         "Bearer ".to_owned() + self.api_token.clone().as_str()
     }
 }
@@ -72,12 +71,7 @@ pub struct OpenAIRequestBuilder {
 
 impl OpenAIRequestBuilder {
     pub async fn create(&self, data: &OpenAIRequest) -> reqwest::Result<OpenAIResponse> {
-        let response = self.request
-            .try_clone()
-            .unwrap()
-            .json(data)
-            .send()
-            .await;
+        let response = self.request.try_clone().unwrap().json(data).send().await;
 
         match response {
             Ok(response) => response.json().await,

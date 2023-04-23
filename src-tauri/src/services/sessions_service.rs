@@ -16,6 +16,15 @@ pub fn list_sessions(assistant_id: &String) -> Vec<Session> {
         .expect("Error loading sessions")
 }
 
+pub fn get_session(session_id: &String) -> Option<Session> {
+    let connection = &mut establish_db_connection();
+
+    dsl::sessions
+        .filter(dsl::id.eq(session_id))
+        .first::<Session>(connection)
+        .ok()
+}
+
 pub fn store_session(new_session: &NewSession) {
     let connection = &mut establish_db_connection();
 

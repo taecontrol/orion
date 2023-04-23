@@ -1,6 +1,6 @@
 use crate::models::message::Message;
 use crate::open_ai::{OpenAI, OpenAIMessage, OpenAIRequest, OpenAIResponse};
-use crate::services::{messages_service, sessions_service};
+use crate::services::{assistants_service, messages_service, sessions_service};
 use tauri::Manager;
 use uuid::Uuid;
 
@@ -10,7 +10,15 @@ pub async fn ask(
     session_id: String,
     message: String,
 ) -> Vec<Message> {
-    let previous_messages = get_context(session_id.clone(), message.clone());
+    let session = sessions_service::get_session(&session_id).unwrap();
+    let assistant = assistants_service::get_assistant(session.assistant_id).unwrap();
+    let mut previous_messages = vec![OpenAIMessage {
+        role: String::from("system"),
+        content: "Your name is ".to_owned() + &assistant.name + ". " + &assistant.description,
+    }];
+    let mut previous_context = get_context(session_id.clone(), message.clone());
+
+    previous_messages.append(&mut previous_context);
 
     rename_session_if_new(
         &previous_messages,
@@ -51,7 +59,7 @@ fn rename_session_if_new(
     message: String,
     app_handle: tauri::AppHandle,
 ) {
-    if previous_messages.len() <= 1 {
+    if previous_messages.len() <= 2 {
         sessions_service::update_session_name(session_id, message);
         app_handle.emit_all("session_updated", {}).unwrap();
     }

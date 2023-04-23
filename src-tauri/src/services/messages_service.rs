@@ -8,6 +8,7 @@ pub fn list_messages(session_id: &String) -> Vec<Message> {
 
     dsl::messages
         .filter(dsl::session_id.eq(session_id))
+        .order_by(dsl::created_at.asc())
         .load::<Message>(connection)
         .expect("Error loading messages")
 }
