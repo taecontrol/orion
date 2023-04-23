@@ -27,6 +27,7 @@
               placeholder="Ask something..."
               v-model="message"
               :disabled="loading"
+              @keydown="onKeyPress"
             />
 
             <div class="py-2" aria-hidden="true">
@@ -66,6 +67,13 @@ defineProps({
     required: false,
   },
 });
+
+function onKeyPress(e: KeyboardEvent) {
+  if (e.key === 'Enter' && e.metaKey) {
+    e.preventDefault();
+    onSubmit();
+  }
+}
 
 function onSubmit() {
   if (message.value.trim() === '') return;
