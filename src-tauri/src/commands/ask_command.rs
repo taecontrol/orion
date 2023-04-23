@@ -1,4 +1,4 @@
-use crate::models::Message;
+use crate::models::message::Message;
 use crate::open_ai::{OpenAI, OpenAIMessage, OpenAIRequest, OpenAIResponse};
 use crate::services::{messages_service, sessions_service};
 use tauri::Manager;

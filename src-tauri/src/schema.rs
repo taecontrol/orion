@@ -1,6 +1,15 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
+    assistants (id) {
+        id -> Text,
+        name -> Text,
+        description -> Text,
+        created_at -> Timestamp,
+    }
+}
+
+diesel::table! {
     messages (id) {
         id -> Text,
         session_id -> Text,
@@ -22,6 +31,7 @@ diesel::table! {
 }
 
 diesel::allow_tables_to_appear_in_same_query!(
+    assistants,
     messages,
     sessions,
 );

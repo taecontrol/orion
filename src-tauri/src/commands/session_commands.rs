@@ -1,4 +1,4 @@
-use crate::models::{NewSession, Session};
+use crate::models::session::{NewSession, Session};
 use crate::services::messages_service;
 use crate::services::sessions_service;
 use tauri::Manager;

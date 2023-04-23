@@ -12,6 +12,7 @@ mod services;
 mod settings;
 
 use commands::ask_command::ask;
+use commands::assistant_commands::*;
 use commands::message_commands::*;
 use commands::session_commands::*;
 use commands::settings_commands::*;
@@ -37,6 +38,7 @@ async fn main() {
             delete_session,
             get_settings,
             set_settings,
+            create_assistant,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

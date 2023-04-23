@@ -1,4 +1,3 @@
--- Your SQL goes here
 CREATE TABLE messages (
     id VARCHAR(50) PRIMARY KEY NOT NULL,
     session_id VARCHAR(50) NOT NULL,

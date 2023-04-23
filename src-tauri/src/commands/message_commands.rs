@@ -1,4 +1,4 @@
-use crate::models::Message;
+use crate::models::message::Message;
 use crate::services::messages_service;
 
 #[tauri::command]

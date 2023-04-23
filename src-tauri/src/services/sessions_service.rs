@@ -1,6 +1,6 @@
 use crate::{
     db::establish_db_connection,
-    models::{NewSession, Session},
+    models::session::{NewSession, Session},
     schema::sessions,
     schema::sessions::dsl,
 };

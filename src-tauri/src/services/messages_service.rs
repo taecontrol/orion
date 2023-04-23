@@ -1,6 +1,6 @@
 use crate::schema::messages;
 use crate::schema::messages::dsl;
-use crate::{db::establish_db_connection, models::Message};
+use crate::{db::establish_db_connection, models::message::Message};
 use diesel::prelude::*;
 
 pub fn list_messages(session_id: &String) -> Vec<Message> {

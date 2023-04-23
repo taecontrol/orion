@@ -1,29 +1,17 @@
 <template>
   <TitleBar />
 
-  <div class="max-w-screen-sm mx-auto mt-10">
-    <div class="flex items-center justify-between">
-      <h1 class="text-xl font-bold">Settings</h1>
-      <a @click="$router.go(-1)">
-        <XMarkIcon class="w-8 h-8 cursor-pointer" />
-      </a>
-    </div>
+  <div class="max-w-md mx-auto mt-10">
+    <PageHeader title="Settings" />
 
-    <div class="mt-10">
-      <label for="open-ai-secret" class="block text-sm font-medium leading-6 text-gray-900"
-        >Open AI secret</label
-      >
-      <div class="mt-2">
-        <input
-          name="open-ai-secret"
-          id="open-ai-secret"
-          class="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-          placeholder="secret..."
-          aria-describedby="open-ai-secret-description"
-          v-model="settings.open_ai_secret"
-        />
-      </div>
-    </div>
+    <TextInput
+      class="mt-10"
+      label="Open AI secret"
+      name="open-ai-secret"
+      id="open-ai-secret"
+      placeholder="secret..."
+      v-model="settings.open_ai_secret"
+    />
 
     <div class="flex items-center justify-end mt-4">
       <button
@@ -55,9 +43,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import TitleBar from '../components/TitleBar.vue';
-import { CheckBadgeIcon, XMarkIcon } from '@heroicons/vue/24/outline';
+import { CheckBadgeIcon } from '@heroicons/vue/24/outline';
 import { invoke } from '@tauri-apps/api';
 import { Settings } from '../types';
+import TextInput from '../components/form/TextInput.vue';
+import PageHeader from '../components/PageHeader.vue';
 
 const settings = ref<Settings>({
   open_ai_secret: '',
