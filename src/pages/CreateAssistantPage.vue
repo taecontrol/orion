@@ -1,7 +1,7 @@
 <template>
   <TitleBar />
 
-  <form @submit.prevent="save" class="max-w-md mx-auto mt-10">
+  <form @submit.prevent="save" class="max-w-lg mx-auto mt-10">
     <PageHeader title="Create new assistant" />
 
     <TextInput
