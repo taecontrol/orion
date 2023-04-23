@@ -9,7 +9,28 @@
   </div>
   <ul ref="chatContainer" class="h-full px-4 overflow-y-auto divide-y">
     <li v-for="message of messages" :key="message.id" class="p-4">
-      <div v-html="convertMarkdownToHtml(message.content)" class="prose max-w-[100ch]"></div>
+      <div class="flex space-x-2">
+        <img
+          v-if="message.role === 'assistant'"
+          class="w-8 h-8 rounded-full"
+          :src="robotImage"
+          alt="AI avatar"
+        />
+        <img
+          v-if="message.role === 'user'"
+          class="w-8 h-8 rounded-full"
+          :src="youImage"
+          alt="You avatar"
+        />
+        <div>
+          <p v-if="message.role === 'assistant'" class="mt-1 font-medium text-gray-400">ChatGPT</p>
+          <p v-if="message.role === 'user'" class="mt-1 font-medium text-gray-400">You</p>
+          <div
+            v-html="convertMarkdownToHtml(message.content)"
+            class="mt-2 prose max-w-[100ch]"
+          ></div>
+        </div>
+      </div>
     </li>
   </ul>
 
@@ -24,6 +45,8 @@
 </template>
 
 <script setup lang="ts">
+import robotImage from '../../assets/robot-1.png';
+import youImage from '../../assets/you.png';
 import { ref, watch, defineProps } from 'vue';
 import { Message } from '../../types';
 import { marked } from 'marked';
