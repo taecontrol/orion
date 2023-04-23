@@ -1,7 +1,7 @@
+use serde::{Deserialize, Serialize};
 use std::fs;
 use std::io::Write;
 use std::path::Path;
-use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Settings {
@@ -22,13 +22,9 @@ impl Settings {
     }
 
     pub fn set(&self) {
-        fs::write(
-            get_file_path(),
-            serde_json::to_string_pretty(self).unwrap(),
-        ).ok();
+        fs::write(get_file_path(), serde_json::to_string_pretty(self).unwrap()).ok();
     }
 }
-
 
 fn create_file() {
     let path = get_file_path();
@@ -40,7 +36,12 @@ fn create_file() {
 
     let mut file = fs::File::create(path).unwrap();
 
-    file.write_all(b"{}").unwrap();
+    file.write_all(
+        b"{
+        open_ai_secret: \"\"
+    }",
+    )
+    .unwrap();
 }
 
 fn file_exists() -> bool {

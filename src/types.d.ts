@@ -14,3 +14,7 @@ export type Message = {
   completion_tokens?: number;
   created_at?: string;
 };
+
+export type Settings = {
+  open_ai_secret: string;
+};

@@ -14,6 +14,7 @@ mod settings;
 use commands::ask_command::ask;
 use commands::message_commands::*;
 use commands::session_commands::*;
+use commands::settings_commands::*;
 
 #[tokio::main]
 async fn main() {
@@ -33,7 +34,9 @@ async fn main() {
             new_session,
             list_sessions,
             list_messages,
-            delete_session
+            delete_session,
+            get_settings,
+            set_settings,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

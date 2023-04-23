@@ -17,7 +17,8 @@
     "dayjs": "^1.11.7",
     "marked": "^4.3.0",
     "uuid": "^9.0.0",
-    "vue": "^3.2.45"
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
