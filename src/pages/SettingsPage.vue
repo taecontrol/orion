@@ -13,6 +13,15 @@
       v-model="settings.open_ai_secret"
     />
 
+    <SelectInput
+      class="mt-10"
+      label="Open AI model"
+      name="open-ai-model"
+      id="open-ai-model"
+      :options="openAIModelOptions"
+      v-model="settings.open_ai_model"
+    />
+
     <div class="flex items-center justify-end mt-4">
       <button
         type="button"
@@ -48,11 +57,14 @@ import { invoke } from '@tauri-apps/api';
 import { Settings } from '../types';
 import TextInput from '../components/form/TextInput.vue';
 import PageHeader from '../components/PageHeader.vue';
+import SelectInput from '../components/form/SelectInput.vue';
 
 const settings = ref<Settings>({
   open_ai_secret: '',
+  open_ai_model: '',
 });
 const saving = ref(false);
+const openAIModelOptions = ref(['gpt-3.5-turbo', 'gpt-4']);
 
 onMounted(async () => {
   settings.value = await invoke('get_settings');

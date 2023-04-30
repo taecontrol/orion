@@ -1,6 +1,7 @@
 use crate::models::message::Message;
 use crate::open_ai::{OpenAI, OpenAIMessage, OpenAIRequest, OpenAIResponse};
 use crate::services::{assistants_service, messages_service, sessions_service};
+use crate::settings::Settings;
 use tauri::Manager;
 use uuid::Uuid;
 
@@ -45,7 +46,7 @@ async fn make_open_ai_request(
     messages: Vec<OpenAIMessage>,
 ) -> Result<OpenAIResponse, reqwest::Error> {
     let data = OpenAIRequest {
-        model: String::from("gpt-3.5-turbo"),
+        model: Settings::get().open_ai_model,
         messages,
         temperature: 0.7,
     };

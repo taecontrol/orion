@@ -24,4 +24,5 @@ export type Assistant = {
 
 export type Settings = {
   open_ai_secret: string;
+  open_ai_model: string;
 };

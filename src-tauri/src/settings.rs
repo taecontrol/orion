@@ -6,6 +6,7 @@ use std::path::Path;
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Settings {
     pub open_ai_secret: String,
+    pub open_ai_model: String,
 }
 
 impl Settings {
@@ -36,7 +37,8 @@ fn create_file() {
 
     let mut file = fs::File::create(path).unwrap();
 
-    file.write_all(b"{\"open_ai_secret\": \"\"}").unwrap();
+    file.write_all(b"{\"open_ai_secret\": \"\", \"open_ai_model\": \"gpt-3.5-turbo\"}")
+        .unwrap();
 }
 
 fn file_exists() -> bool {
