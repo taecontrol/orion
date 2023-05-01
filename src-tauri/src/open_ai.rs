@@ -38,6 +38,18 @@ pub struct OpenAIResponse {
     pub choices: Vec<OpenAIChoice>,
 }
 
+#[derive(serde::Deserialize, Debug)]
+pub struct OpenAIErrorResponse {
+    pub error: OpenAIError,
+}
+
+#[derive(serde::Deserialize, Debug)]
+pub struct OpenAIError {
+    pub message: String,
+    pub r#type: String,
+    pub code: String,
+}
+
 pub struct OpenAI {
     client: Client,
     api_token: String,
@@ -70,12 +82,23 @@ pub struct OpenAIRequestBuilder {
 }
 
 impl OpenAIRequestBuilder {
-    pub async fn create(&self, data: &OpenAIRequest) -> reqwest::Result<OpenAIResponse> {
-        let response = self.request.try_clone().unwrap().json(data).send().await;
+    pub async fn create(&self, data: &OpenAIRequest) -> Result<OpenAIResponse, OpenAIError> {
+        let response = match self.request.try_clone().unwrap().json(data).send().await {
+            Ok(it) => it,
+            Err(_err) => {
+                return Err(OpenAIError {
+                    message: String::from("Open AI error: There was an error sending the request."),
+                    r#type: String::from("error"),
+                    code: String::from("error"),
+                })
+            }
+        };
 
-        match response {
-            Ok(response) => response.json().await,
-            Err(error) => Err(error),
+        if response.status() != reqwest::StatusCode::OK {
+            let error = response.json::<OpenAIErrorResponse>().await;
+            return Err(error.unwrap().error);
         }
+
+        Ok(response.json::<OpenAIResponse>().await.unwrap())
     }
 }

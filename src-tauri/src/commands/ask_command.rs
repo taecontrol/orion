@@ -1,6 +1,6 @@
 use crate::models::message::Message;
 use crate::notification::Notification;
-use crate::open_ai::{OpenAI, OpenAIMessage, OpenAIRequest, OpenAIResponse};
+use crate::open_ai::{OpenAI, OpenAIError, OpenAIMessage, OpenAIRequest, OpenAIResponse};
 use crate::services::{assistants_service, messages_service, sessions_service};
 use crate::settings::Settings;
 use tauri::Manager;
@@ -42,15 +42,13 @@ pub async fn ask(
             Notification::error(
                 app_handle,
                 "Open AI error",
-                &("Open AI error: ".to_owned() + &error.to_string()),
+                &("Open AI error: ".to_owned() + &error.message),
             );
             vec![]
         }
     }
 }
-async fn make_open_ai_request(
-    messages: Vec<OpenAIMessage>,
-) -> Result<OpenAIResponse, reqwest::Error> {
+async fn make_open_ai_request(messages: Vec<OpenAIMessage>) -> Result<OpenAIResponse, OpenAIError> {
     let data = OpenAIRequest {
         model: Settings::get().open_ai_model,
         messages,
