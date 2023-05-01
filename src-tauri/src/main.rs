@@ -17,6 +17,7 @@ use commands::assistant_commands::*;
 use commands::message_commands::*;
 use commands::session_commands::*;
 use commands::settings_commands::*;
+use services::assistants_service;
 
 #[tokio::main]
 async fn main() {
@@ -27,6 +28,7 @@ async fn main() {
             tokio::spawn(async move {
                 db::init();
                 settings::Settings::init();
+                assistants_service::init();
             });
 
             Ok(())

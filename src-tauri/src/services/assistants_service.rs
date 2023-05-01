@@ -1,6 +1,23 @@
 use crate::{db::establish_db_connection, models::assistant::Assistant, schema::assistants::dsl};
 use diesel::prelude::*;
 
+pub fn init() {
+    let assistants = list_assistants();
+
+    if assistants.len() > 0 {
+        return;
+    }
+
+    let default_assistant = Assistant {
+        id: String::from("chatgpt"),
+        name: "ChatGPT".to_string(),
+        description: "You are chatGPT".to_string(),
+        created_at: chrono::Utc::now().naive_utc(),
+    };
+
+    store_new_assistant(&default_assistant);
+}
+
 pub fn list_assistants() -> Vec<Assistant> {
     let connection = &mut establish_db_connection();
 

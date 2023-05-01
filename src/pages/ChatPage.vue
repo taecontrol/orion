@@ -40,6 +40,6 @@ function getSelectedSession() {
 }
 
 function getSelectedAssistant() {
-  return localStorage.getItem('selectedAssistant') ?? undefined;
+  return localStorage.getItem('selectedAssistant') ?? 'chatgpt';
 }
 </script>
