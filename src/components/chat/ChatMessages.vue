@@ -49,7 +49,7 @@
 <script setup lang="ts">
 import robotImage from '../../assets/robot-1.png';
 import youImage from '../../assets/you.png';
-import { ref, watch, defineProps } from 'vue';
+import { ref, watch, defineProps, onMounted } from 'vue';
 import { Message } from '../../types';
 import { marked } from 'marked';
 import { invoke } from '@tauri-apps/api/tauri';
@@ -58,36 +58,35 @@ import { v4 as uuidv4 } from 'uuid';
 import DeleteSessionDialog from './DeleteSessionDialog.vue';
 import { TrashIcon } from '@heroicons/vue/24/outline';
 import { useCurrentAssistantStore } from '../../stores/currentAssistant';
+import { useCurrentSessionStore } from '../../stores/currentSession';
 
 const currentAsssistantStore = useCurrentAssistantStore();
+const currentSessionStore = useCurrentSessionStore();
 
 const openConfirmation = ref(false);
 const loading = ref(false);
 const messages = ref<Message[]>([]);
 const chatContainer = ref<HTMLElement | null>(null);
 
-const props = defineProps({
-  selectedSessionId: {
-    type: String,
-    required: false,
-  },
-});
-
-watch(
-  () => props.selectedSessionId,
-  async (sessionId) => {
-    if (!sessionId) {
-      messages.value = [];
-      return;
-    }
-
+onMounted(async () => {
+  if (currentSessionStore.currentSession?.id) {
     messages.value = await listMessages();
     scrollToBottom();
   }
-);
+});
+
+currentSessionStore.$subscribe(async (_, state) => {
+  if (!state.currentSession?.id) {
+    messages.value = [];
+    return;
+  }
+
+  messages.value = await listMessages();
+  scrollToBottom();
+});
 
 function listMessages(): Promise<Message[]> {
-  return invoke('list_messages', { sessionId: props.selectedSessionId });
+  return invoke('list_messages', { sessionId: currentSessionStore.currentSession?.id });
 }
 function convertMarkdownToHtml(markdown: string) {
   return marked(markdown);
@@ -111,7 +110,7 @@ function confirmDeleteSession() {
 
 async function deleteSession() {
   openConfirmation.value = false;
-  await invoke('delete_session', { sessionId: props.selectedSessionId });
+  await invoke('delete_session', { sessionId: currentSessionStore.currentSession?.id });
   messages.value = [];
 }
 
@@ -121,14 +120,17 @@ async function onSubmit(message: string) {
     role: 'user',
     content: message,
     created_at: new Date().toISOString(),
-    session_id: props.selectedSessionId!,
+    session_id: currentSessionStore.currentSession?.id!,
   };
 
   messages.value = [...messages.value, dummyMessage];
   scrollToBottom();
 
   loading.value = true;
-  await invoke('ask', { sessionId: props.selectedSessionId, message: dummyMessage.content });
+  await invoke('ask', {
+    sessionId: currentSessionStore.currentSession?.id,
+    message: dummyMessage.content,
+  });
 
   messages.value = await listMessages();
 

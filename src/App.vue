@@ -6,10 +6,13 @@
 import { onMounted } from 'vue';
 import Notification from './components/Notification.vue';
 import { useCurrentAssistantStore } from './stores/currentAssistant';
+import { useCurrentSessionStore } from './stores/currentSession';
 
 const currentAsssistantStore = useCurrentAssistantStore();
+const currentSessionStore = useCurrentSessionStore();
 
-onMounted(() => {
-  currentAsssistantStore.init();
+onMounted(async () => {
+  await currentAsssistantStore.init();
+  await currentSessionStore.init();
 });
 </script>

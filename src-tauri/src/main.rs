@@ -37,6 +37,7 @@ async fn main() {
             ask,
             new_session,
             list_sessions,
+            get_session,
             list_messages,
             delete_session,
             get_settings,

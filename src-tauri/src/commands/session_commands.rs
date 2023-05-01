@@ -10,6 +10,11 @@ pub fn list_sessions(assistant_id: String) -> Vec<Session> {
 }
 
 #[tauri::command]
+pub fn get_session(id: String) -> Option<Session> {
+    sessions_service::get_session(&id)
+}
+
+#[tauri::command]
 pub fn new_session(assistant_id: String) -> Session {
     let new_session = NewSession {
         id: Uuid::new_v4().to_string(),

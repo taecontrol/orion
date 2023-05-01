@@ -15,9 +15,9 @@
       <div
         v-for="session of sessions"
         :key="session.id"
-        @click="selectSession(session.id)"
+        @click="currentSessionStore.selectSession(session.id)"
         class="p-2 hover:cursor-pointer"
-        :class="{ 'bg-indigo-100': selectedSessionId === session.id }"
+        :class="{ 'bg-indigo-100': currentSessionStore.currentSession?.id === session.id }"
       >
         <p class="truncate">{{ session.name }}</p>
         <span class="text-gray-400">{{ dayjs.utc(session.created_at).local().fromNow() }}</span>
@@ -46,26 +46,22 @@ import { invoke } from '@tauri-apps/api/tauri';
 import { listen } from '@tauri-apps/api/event';
 import { Cog8ToothIcon, UserCircleIcon } from '@heroicons/vue/24/outline';
 import { useCurrentAssistantStore } from '../../stores/currentAssistant';
+import { useCurrentSessionStore } from '../../stores/currentSession';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
 
 const currentAssistantStore = useCurrentAssistantStore();
+const currentSessionStore = useCurrentSessionStore();
 
 const sessions = ref<Session[]>([]);
 
-const emit = defineEmits(['select-session']);
-
-const props = defineProps({
-  selectedSessionId: {
-    type: String,
-    required: false,
-  },
-});
-
 onMounted(async () => {
-  sessions.value = await listSessions();
-  if (!props.selectedSessionId) {
+  if (currentSessionStore.currentSession?.id) {
+    sessions.value = await listSessions();
+  }
+
+  if (!currentSessionStore.currentSession?.id) {
     selectFirstSession();
   }
 
@@ -102,13 +98,9 @@ async function newSession() {
   selectFirstSession();
 }
 
-function selectSession(sessionId: string) {
-  emit('select-session', sessionId);
-}
-
 function selectFirstSession() {
   if (sessions.value.length > 0) {
-    selectSession(sessions.value[0].id);
+    currentSessionStore.selectSession(sessions.value[0].id);
   }
 }
 </script>
