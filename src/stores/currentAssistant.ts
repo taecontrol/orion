@@ -15,5 +15,11 @@ export const useCurrentAssistantStore = defineStore('currentAssistant', {
       const id = localStorage.getItem('selectedAssistant') ?? 'chatgpt';
       this.currentAssistant = await invoke('get_assistant', { id });
     },
+
+    async selectAssistant(id: string) {
+      this.currentAssistant = await invoke('get_assistant', { id });
+      localStorage.setItem('selectedAssistant', id);
+      localStorage.removeItem('selectedSession');
+    },
   },
 });

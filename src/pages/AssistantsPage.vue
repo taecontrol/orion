@@ -68,27 +68,21 @@ import robotImage from '../assets/robot-1.png';
 import { PencilSquareIcon, PlusCircleIcon } from '@heroicons/vue/24/outline';
 import { RadioGroup, RadioGroupOption } from '@headlessui/vue';
 import { CheckCircleIcon } from '@heroicons/vue/20/solid';
+import { useCurrentAssistantStore } from '../stores/currentAssistant';
+
+const currentAsssistantStore = useCurrentAssistantStore();
 
 const assistants = ref<Assistant[]>([]);
 const selectedAssistant = ref<string | undefined>(undefined);
 
 onMounted(async () => {
   assistants.value = await invoke('list_assistants');
-  selectedAssistant.value = getSelectedAssistant();
+  selectedAssistant.value = currentAsssistantStore.currentAssistant?.id;
 });
 
 watch(selectedAssistant, (value) => {
   if (value !== undefined) {
-    selectAssistant();
+    currentAsssistantStore.selectAssistant(value);
   }
 });
-
-function getSelectedAssistant() {
-  return localStorage.getItem('selectedAssistant') ?? undefined;
-}
-
-function selectAssistant() {
-  localStorage.setItem('selectedAssistant', selectedAssistant.value!);
-  localStorage.removeItem('selectedSession');
-}
 </script>
