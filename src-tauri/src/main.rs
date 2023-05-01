@@ -6,6 +6,7 @@
 mod commands;
 mod db;
 mod models;
+mod notification;
 mod open_ai;
 mod schema;
 mod services;

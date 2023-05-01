@@ -1,4 +1,5 @@
 use crate::models::message::Message;
+use crate::notification::Notification;
 use crate::open_ai::{OpenAI, OpenAIMessage, OpenAIRequest, OpenAIResponse};
 use crate::services::{assistants_service, messages_service, sessions_service};
 use crate::settings::Settings;
@@ -25,7 +26,7 @@ pub async fn ask(
         &previous_messages,
         session_id.clone(),
         message.clone(),
-        app_handle,
+        &app_handle,
     );
 
     let response = make_open_ai_request(previous_messages).await;
@@ -37,7 +38,12 @@ pub async fn ask(
 
             vec![user_message, assistant_message]
         }
-        Err(_error) => {
+        Err(error) => {
+            Notification::error(
+                app_handle,
+                "Open AI error",
+                &("Open AI error: ".to_owned() + &error.to_string()),
+            );
             vec![]
         }
     }
@@ -58,7 +64,7 @@ fn rename_session_if_new(
     previous_messages: &Vec<OpenAIMessage>,
     session_id: String,
     message: String,
-    app_handle: tauri::AppHandle,
+    app_handle: &tauri::AppHandle,
 ) {
     if previous_messages.len() <= 2 {
         sessions_service::update_session_name(session_id, message);
