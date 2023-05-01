@@ -45,9 +45,12 @@ import { Session } from '../../types';
 import { invoke } from '@tauri-apps/api/tauri';
 import { listen } from '@tauri-apps/api/event';
 import { Cog8ToothIcon, UserCircleIcon } from '@heroicons/vue/24/outline';
+import { useCurrentAssistantStore } from '../../stores/currentAssistant';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
+
+const currentAssistantStore = useCurrentAssistantStore();
 
 const sessions = ref<Session[]>([]);
 
@@ -58,13 +61,14 @@ const props = defineProps({
     type: String,
     required: false,
   },
-  selectedAssistantId: {
-    type: String,
-    required: false,
-  },
 });
 
 onMounted(async () => {
+  sessions.value = await listSessions();
+  if (!props.selectedSessionId) {
+    selectFirstSession();
+  }
+
   await listen('session_updated', async () => {
     sessions.value = await listSessions();
   });
@@ -75,27 +79,25 @@ onMounted(async () => {
   });
 });
 
-watch(
-  () => props.selectedAssistantId,
-  async (value) => {
-    if (!value) {
-      return;
-    }
-    sessions.value = await listSessions();
-    selectFirstSession();
-  }
-);
-
-async function listSessions(): Promise<Session[]> {
-  return invoke('list_sessions', { assistantId: props.selectedAssistantId });
-}
-
-async function newSession() {
-  if (!props.selectedAssistantId) {
+currentAssistantStore.$subscribe(async (_, state) => {
+  if (!state.currentAssistant?.id) {
     return;
   }
 
-  await invoke('new_session', { assistantId: props.selectedAssistantId });
+  sessions.value = await listSessions();
+  selectFirstSession();
+});
+
+async function listSessions(): Promise<Session[]> {
+  return invoke('list_sessions', { assistantId: currentAssistantStore.currentAssistant?.id });
+}
+
+async function newSession() {
+  if (!currentAssistantStore.currentAssistant?.id) {
+    return;
+  }
+
+  await invoke('new_session', { assistantId: currentAssistantStore.currentAssistant?.id });
   sessions.value = await listSessions();
   selectFirstSession();
 }
