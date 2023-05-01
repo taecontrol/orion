@@ -23,7 +23,9 @@
           alt="You avatar"
         />
         <div>
-          <p v-if="message.role === 'assistant'" class="mt-1 font-medium text-gray-400">ChatGPT</p>
+          <p v-if="message.role === 'assistant'" class="mt-1 font-medium text-gray-400">
+            {{ currentAsssistantStore.currentAssistant?.name ?? 'chatGPT' }}
+          </p>
           <p v-if="message.role === 'user'" class="mt-1 font-medium text-gray-400">You</p>
           <div
             v-html="convertMarkdownToHtml(message.content)"
@@ -55,6 +57,9 @@ import MessageTextarea from './MessageTextarea.vue';
 import { v4 as uuidv4 } from 'uuid';
 import DeleteSessionDialog from './DeleteSessionDialog.vue';
 import { TrashIcon } from '@heroicons/vue/24/outline';
+import { useCurrentAssistantStore } from '../../stores/currentAssistant';
+
+const currentAsssistantStore = useCurrentAssistantStore();
 
 const openConfirmation = ref(false);
 const loading = ref(false);

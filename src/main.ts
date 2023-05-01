@@ -7,6 +7,7 @@ import CreateAssistantPage from './pages/CreateAssistantPage.vue';
 import EditAssistantPage from './pages/EditAssistantPage.vue';
 import AssistantsPage from './pages/AssistantsPage.vue';
 import { createRouter, createWebHistory } from 'vue-router';
+import { createPinia } from 'pinia';
 
 const routes = [
   { path: '/', component: ChatPage },
@@ -21,4 +22,6 @@ const router = createRouter({
   routes,
 });
 
-createApp(App).use(router).mount('#app');
+const pinia = createPinia();
+
+createApp(App).use(router).use(pinia).mount('#app');
