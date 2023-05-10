@@ -11,8 +11,8 @@ Whether you're looking for a more productive workday or simply want to chat with
 
 ## Installation
 
-- Download the installation file from [here]()
-- You can also clone the repo, install depenedencies, and run `npm run tauri build`. The installation file is going to be created on `./src-tauri/target/release/bundle` directory.
+- Download the installation file and support us by paying what you want (even 0$) from [here](https://taecontrol.lemonsqueezy.com/checkout/buy/0b6e6aea-457b-42ea-a14b-c4371dd1a3fa).
+- You can also clone the repo, install dependencies, and run `npm run tauri build`. The installation file is going to be created on `./src-tauri/target/release/bundle` directory.
 
 ## Setup
 
@@ -38,6 +38,13 @@ Define how you want your assistant behaves in this view:
 ### General settings view
 Set you Open AI key and model on this view:
 ![General settings view](/docs/images/settings.png?raw=true)
+
+
+## Get our book - MoonGuard: The Software Creator's Journey
+
+Our team has written a book, "MoonGuard: The Software
+Creator's Journey." In this book, we document and explain the entire process
+of creating, developing, publishing a [Filament plugin](https://filamentphp.com/). Get your own digital copy on [https://moonguard.dev](https://moonguard.dev/book)
 
 ## License
 
