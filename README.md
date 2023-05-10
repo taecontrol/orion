@@ -1,16 +1,43 @@
-# Tauri + Vue 3 + TypeScript
+# Orion
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Introducing Orion - the desktop app that lets you create multiple assistants with specific goals. With chatGPT technology behind it, Orion's assistants are capable of helping you with anything you need, based on the goals you've defined for them.
 
-## Recommended IDE Setup
+Built with Tauri, Orion is a lightweight app that takes up only 11MB of space on your computer. It's the perfect tool for anyone who wants to define a unique profile for their assistant, complete with a list of instructions, and have personalized conversations with it.
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+Orion's features include a local SQLite database that stores the chat history for each assistant and allows you to easily organize your conversations by assistant. You can also use your own OpenAI key and general settings are stored in local.
 
-## Type Support For `.vue` Imports in TS
+Whether you're looking for a more productive workday or simply want to chat with a friendly virtual assistant, Orion has got you covered. Try it out today and see how it can simplify your life.
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+## Installation
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
+- Download the installation file from [here]()
+- You can also clone the repo, install depenedencies, and run `npm run tauri build`. The installation file is going to be created on `./src-tauri/target/release/bundle` directory.
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+## Setup
+
+1. Start by opening the app and selecting the settings icon. From there, you can add your OpenAI API key and save the changes. If you don't have an API key yet, you can create one from the OpenAI dashboard.
+1. Once you've added your API key, close the settings page and select the assistant icon to create a new assistant. By default, there is a "ChatGPT" assistant.
+1. When creating a new assistant, you can provide as much information as you want about how you want your assistant to behave and what kind of information it should provide. You can do this by filling in the description input field.
+1. Select the assistant you want to use.
+1. Close the assistants page and start a new chat. That's it! You're ready to start using your new assistant.
+
+## Screenshots
+### Chat view
+Here is where you can chat with you selected assistant:
+![Chat view](/docs/images/assistant-chat.png?raw=true)
+
+### Assistants view
+You can see and select you assistants from here:
+![Chat view](/docs/images/assistants.png?raw=true)
+
+### Assistant information view
+Define how you want your assistant behaves in this view:
+![Chat view](/docs/images/assistant-config.png?raw=true)
+
+### General settings view
+Set you Open AI key and model on this view:
+![Chat view](/docs/images/settings.png?raw=true)
+
+## License
+
+Orion desktop app is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT)
