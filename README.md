@@ -1,3 +1,4 @@
+![Orion Logo](/docs/images/orion.png?raw=true)
 # Orion
 
 Introducing Orion - the desktop app that lets you create multiple assistants with specific goals. With chatGPT technology behind it, Orion's assistants are capable of helping you with anything you need, based on the goals you've defined for them.
@@ -28,15 +29,15 @@ Here is where you can chat with you selected assistant:
 
 ### Assistants view
 You can see and select you assistants from here:
-![Chat view](/docs/images/assistants.png?raw=true)
+![Assistants view](/docs/images/assistants.png?raw=true)
 
 ### Assistant information view
 Define how you want your assistant behaves in this view:
-![Chat view](/docs/images/assistant-config.png?raw=true)
+![Assistant information view](/docs/images/assistant-config.png?raw=true)
 
 ### General settings view
 Set you Open AI key and model on this view:
-![Chat view](/docs/images/settings.png?raw=true)
+![General settings view](/docs/images/settings.png?raw=true)
 
 ## License
 
