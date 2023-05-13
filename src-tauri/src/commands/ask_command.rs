@@ -65,7 +65,8 @@ fn rename_session_if_new(
     app_handle: &tauri::AppHandle,
 ) {
     if previous_messages.len() <= 2 {
-        sessions_service::update_session_name(session_id, message);
+        let name = if message.len() > 30 {message[..30].to_owned()} else {message.clone()};
+        sessions_service::update_session_name(session_id, name);
         app_handle.emit_all("session_updated", {}).unwrap();
     }
 }
