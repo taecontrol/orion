@@ -26,7 +26,7 @@
               class="block w-full resize-none border-0 bg-transparent text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:py-1.5 sm:text-sm sm:leading-6"
               placeholder="Ask something..."
               v-model="message"
-              :disabled="loading"
+              :disabled="loading || disabled"
               @keydown="onKeyPress"
             />
 
@@ -40,7 +40,7 @@
           <div class="absolute inset-x-0 bottom-0 flex justify-end py-2 pl-3 pr-2">
             <div class="flex-shrink-0">
               <button
-                :disabled="loading"
+                :disabled="loading || disabled"
                 type="submit"
                 class="inline-flex items-center px-3 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-indigo-400"
               >
@@ -63,6 +63,10 @@ const message = ref('');
 const emit = defineEmits(['submit']);
 defineProps({
   loading: {
+    type: Boolean,
+    required: false,
+  },
+  disabled: {
     type: Boolean,
     required: false,
   },

@@ -36,7 +36,7 @@
     </li>
   </ul>
 
-  <MessageTextarea @submit="onSubmit" :loading="loading" />
+  <MessageTextarea @submit="onSubmit" :loading="loading" :disabled="inputDisabled" />
 
   <DeleteSessionDialog
     :open="openConfirmation"
@@ -65,6 +65,7 @@ const currentSessionStore = useCurrentSessionStore();
 
 const openConfirmation = ref(false);
 const loading = ref(false);
+const inputDisabled = ref(false);
 const messages = ref<Message[]>([]);
 const chatContainer = ref<HTMLElement | null>(null);
 
@@ -72,15 +73,19 @@ onMounted(async () => {
   if (currentSessionStore.currentSession?.id) {
     messages.value = await listMessages();
     scrollToBottom();
+  } else {
+    inputDisabled.value = true;
   }
 });
 
 currentSessionStore.$subscribe(async (_, state) => {
   if (!state.currentSession?.id) {
     messages.value = [];
+    inputDisabled.value = true;
     return;
   }
 
+  inputDisabled.value = false;
   messages.value = await listMessages();
   scrollToBottom();
 });
