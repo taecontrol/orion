@@ -64,7 +64,12 @@ const settings = ref<Settings>({
   open_ai_model: '',
 });
 const saving = ref(false);
-const openAIModelOptions = ref(['gpt-3.5-turbo', 'gpt-4']);
+const openAIModelOptions = ref([
+  'gpt-3.5-turbo',
+  'gpt-3.5-turbo-0613',
+  'gpt-3.5-turbo-16k-0613',
+  'gpt-4',
+]);
 
 onMounted(async () => {
   settings.value = await invoke('get_settings');
