@@ -69,6 +69,7 @@ const openAIModelOptions = ref([
   'gpt-3.5-turbo-0613',
   'gpt-3.5-turbo-16k-0613',
   'gpt-4',
+  'gpt-4-1106-preview',
 ]);
 
 onMounted(async () => {
